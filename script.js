@@ -1,7 +1,7 @@
 var board;
 var boxMatrix = [[],[],[]];
 var turn = 0;
-
+var gameOver = false;
 function init(){
 	board = document.getElementById('board');
 	
@@ -12,6 +12,20 @@ function init(){
 			boxMatrix[row][col] = c;
 		}
 	}		
+}
+
+function resetGame(){
+	
+	for(var row = 0 ; row < 3; row++){
+		for(var col = 0 ; col < 3; col++){
+			boxMatrix[row][col].value = undefined;
+		}
+	}
+	var cells = document.body.getElementsByClassName("cellImg");
+	for( c in cells)
+		cells[c].src="";
+	turn = 0;
+	gameOver = false; 
 }
 
 function Cell(row,col){
@@ -28,28 +42,35 @@ function Cell(row,col){
 		 cell.appendChild(cellImg);
 		 
 		 cell.onclick = function(){
-			if(turn % 2 == 0 && currentObj.value == undefined){ // put x
-				cellImg.src="images/x_image.png";
-				currentObj.value = "x";
-				turn++;
-			}
-			else if(turn % 2 == 1 && currentObj.value == undefined){ // put 0;
-				cellImg.src="images/o_image.png";
-				currentObj.value = "o";
-				turn++;
-			}
-			
-			if(turn == 9){
-				if(checkForWinner(currentObj.row,currentObj.col))
-					delayedAlert(currentObj.value + " Wins! ");
+			if(!gameOver){ 
+				if(turn % 2 == 0 && currentObj.value == undefined){ // put x
+					cellImg.src="images/x_image.png";
+					currentObj.value = "x";
+					turn++;
+				}
+				else if(turn % 2 == 1 && currentObj.value == undefined){ // put 0;
+					cellImg.src="images/o_image.png";
+					currentObj.value = "o";
+					turn++;
+				}
 				
-				else
-					delayedAlert("Game over");
+				if(turn == 9){
+					gameOver = true;
+					
+					if(checkForWinner(currentObj.row,currentObj.col))
+						delayedAlert(currentObj.value + " Wins! ");
+					
+					
+					else
+						delayedAlert("Game over");
+				}
+				//after 5 turns there are 3 X , check for winner
+				else if(turn >= 5 && checkForWinner(currentObj.row,currentObj.col)){
+					gameOver = true;
+					delayedAlert(currentObj.value + " Wins! ");
+				}
 			}
-			//after 5 turns there are 3 X , check for winner
-			else if(turn >= 5 && checkForWinner(currentObj.row,currentObj.col))
-				delayedAlert(currentObj.value + " Wins! ");
-		 };
+		};
 	};
 }
 
