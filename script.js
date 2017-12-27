@@ -41,14 +41,14 @@ function Cell(row,col){
 			
 			if(turn == 9){
 				if(checkForWinner(currentObj.row,currentObj.col))
-					alert(currentObj.value + " Wins! ");
+					delayedAlert(currentObj.value + " Wins! ");
 				
 				else
-					setTimeout(function(){alert("game over");},100);
+					delayedAlert("Game over");
 			}
 			//after 5 turns there are 3 X , check for winner
 			else if(turn >= 5 && checkForWinner(currentObj.row,currentObj.col))
-				alert(currentObj.value + " Wins! ");
+				delayedAlert(currentObj.value + " Wins! ");
 		 };
 	};
 }
@@ -78,4 +78,10 @@ function checkForWinner(row,col){
 	}
 	
 	return false;
+}
+
+//this function is used to pop the alert after a small delay
+//it fixes the appearance of the alert before the last move is shown on board. 
+function delayedAlert(msg){
+	setTimeout(function(){alert(msg);},100);
 }
